@@ -1,0 +1,17 @@
+.header {
+    display: flex;
+    justify-content: space-around;
+    background: #C09F80;
+}
+
+.header-right-side {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#header-profile-pic {
+        height: auto; 
+        width: auto; 
+        max-width: 100x; 
+        max-height: 100px;
+}
