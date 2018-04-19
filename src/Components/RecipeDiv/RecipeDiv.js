@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './RecipeDiv.css';
 
 class RecipeDiv extends Component {
   render() {

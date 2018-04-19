@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators} from 'redux';
-import './Header.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { resetRedux } from '../../Redux/Actions/actions';
@@ -23,12 +22,12 @@ class Header extends Component {
         return (
            <div className='header' >
                 <div className='header-left-side' >
-                    <h1>App Name</h1>
+                    <Link to='/dashboard'><h1>App Name</h1></Link>
                 </div>
                 <div className='header-right-side' >
-                    <Link to={`/profile/${this.props.loginReducer.id}`} >
-                        <p>{this.props.loginReducer.username}</p>
-                        <img id='header-profile-pic' src={this.props.loginReducer.profile_pic} alt={this.props.loginReducer.username}/>
+                    <Link to={`/profile/${this.props.login.id}`} >
+                        <p>{this.props.login.username}</p>
+                        <img id='header-profile-pic' src={this.props.login.profile_pic} alt={this.props.login.username}/>
                     </Link>
                     <Link to='/'> <div onClick={this.logout}><p>Logout</p></div></Link>
                 </div>

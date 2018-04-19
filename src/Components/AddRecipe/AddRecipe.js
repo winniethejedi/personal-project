@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header';
-import './AddRecipe.css';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import Categories from '../Categories/Categories';
 
 class AddRecipe extends Component {
     constructor(props){
@@ -9,12 +10,15 @@ class AddRecipe extends Component {
         this.state = {
             name: '',
             description: '',
-            ingredients: [],
             directions: '',
             time: '',
-            image: ''
+            image: '',
+            categories: [],
+            selectedCategories: [],
+            dbIngredients: []
         }
         this.handleChange = this.handleChange.bind(this);
+        this.submitForm = this.submitForm.bind(this);
     }    
 
     handleChange(e){
@@ -23,21 +27,38 @@ class AddRecipe extends Component {
         });
     }
 
-    postRecipe(e){
-        axios.post('/api/recipe ', {
-            name: this.state.name,
-            description: this.state.description,
-            ingredients: [],
-            directions: '',
-            time: this.state.time,
-            image: this.state.image
+componentWillMount(){
+    axios.get('/api/ingredients')
+        .then(res=> {
+            this.setState({
+                dbIngredients: res.data
+            })
         })
-        .then((res)=>{
-            this.props.history.push('/dashboard');
-        })
-    }
+}
+
+submitForm(e){
+    const ingredientsArray = this.refs.ingredients.value.split('\n');
+    ingredientsArray.map((ingredient, i) => {
+        if (ingredient === ''){
+            ingredientsArray.splice(i, 1);
+        }
+    });
+    axios.post('/api/recipe ', {
+        name: this.state.name,
+        description: this.state.description,
+        ingredients: ingredientsArray,
+        directions: this.state.directions,
+        time: this.state.time,
+        image: this.state.image,
+        categories: this.props.categories,
+    })
+    .then((res)=>{
+        this.props.history.push('/dashboard');
+    })
+}
 
   render() {
+    
     return (
         <div className='add-recipe-page' >
             <Header/>
@@ -48,7 +69,7 @@ class AddRecipe extends Component {
                 <p>Description</p>
                 <input type="text" placeholder='Description' name='description' value={this.state.description} onChange={this.handleChange}/>
                 <p>Ingredients</p>
-                <textarea placeholder='Ingredients'/>
+                <textarea placeholder='Ingredients' id='ingredients' ref='ingredients'/>
                 <p>Directions</p>
                 <textarea placeholder='Directions' name='directions' value={this.state.directions} onChange={this.handleChange}/>
                 <p>Time to Prepare (in minutes)</p>
@@ -56,10 +77,12 @@ class AddRecipe extends Component {
                 <div className='add-recipe-image' style={{backgroundImage: `url(${this.state.image})`}} alt='Preview' />
                 <p>Image URL</p>
                 <input type="text" placeholder='Image URL' name='image' value={this.state.image} onChange={this.handleChange}/>
+                <Categories/>
+                <button onClick={this.submitForm} >Submit</button>
             </div>
         </div>
     );
   }
 }
 
-export default AddRecipe;
+export default connect(state => state)(AddRecipe);

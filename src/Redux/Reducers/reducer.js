@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import { RESET_REDUX_STATE, LOGIN } from '../Actions/constraints';
+import { RESET_REDUX_STATE, LOGIN, CATEGORIES, RESET_CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS } from '../Actions/constraints';
 
-function loginReducer (state = {}, action){
+function login (state = {}, action){
     switch(action.type){
         case LOGIN :
             return state = action.payload;
@@ -12,6 +12,77 @@ function loginReducer (state = {}, action){
     }
 };
 
-const rootReducer = combineReducers({loginReducer});
+function categories (state = [], action){
+    switch(action.type){
+        case CATEGORIES :
+            state.push(action.payload);
+            return state;
+        case RESET_REDUX_STATE :
+            return state = [];
+        case RESET_CATEGORIES :
+            return state = [];
+        default:
+            return state;
+    }
+};
+
+function categoriesCounter (state = 1, action){
+    switch(action.type){
+        case CATEGORIES_COUNTER :
+            return state += 1;
+        case RESET_REDUX_STATE :
+            return state = 1;
+        case RESET_CATEGORIES :
+            return state = 1;
+        default:
+            return state;
+    }
+};
+
+function ingredients (state = [], action){
+    switch(action.type){
+        case INGREDIENTS :
+            return state = action.payload;
+        case RESET_REDUX_STATE :
+            return state = [];
+        default:
+            return state;
+    }
+};
+
+function searchRecipes (state = [], action){
+    switch(action.type){
+        case SEARCH_RECIPES :
+            return state = action.payload;
+        case RESET_REDUX_STATE :
+            return state = [];
+        default:
+            return state;
+    }
+};
+
+function favoriteRecipes (state = [], action){
+    switch(action.type){
+        case FAVORITE_RECIPES :
+            return state = action.payload;
+        case RESET_REDUX_STATE :
+            return state = [];
+        default:
+            return state;
+    }
+};
+
+function userRecipes (state = [], action){
+    switch(action.type){
+        case USER_RECIPES:
+            return state = action.payload;
+        case RESET_REDUX_STATE :
+            return state = [];
+        default:
+            return state;
+    }
+};
+
+const rootReducer = combineReducers({login, categories, categoriesCounter, ingredients, searchRecipes, favoriteRecipes, userRecipes});
 
 export default rootReducer;

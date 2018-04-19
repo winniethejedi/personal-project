@@ -14,14 +14,17 @@ CREATE TABLE recipes (
     directions VARCHAR,
     time INT,
     image VARCHAR,
-    date_added DATE
+    date_added DATE,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE ingredients (
     id SERIAL PRIMARY KEY,
     name VARCHAR,
     date_added DATE,
-    user_id INT
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE categories (

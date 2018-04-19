@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../Header/Header';
 import axios from 'axios';
-import './Dashboard.css';
-
-const selectedCategories = [];
+import { connect } from 'react-redux';
+import { bindActionCreators} from 'redux';
+import { searchRecipesAction, ingredientsAction } from '../../Redux/Actions/actions';
+import Categories from '../Categories/Categories';
 
 class Dashboard extends Component {
   constructor(props){
@@ -13,10 +14,47 @@ class Dashboard extends Component {
       categories: [],
       selectedCategories: [],
       ingredients: [],
-      time: ''
+      time: '',
+      dbIngredients: []
     }
     this.handleChange = this.handleChange.bind(this);
-    this.clickCategory = this.clickCategory.bind(this);
+    this.getRecipes = this.getRecipes.bind(this);
+}
+
+componentWillMount(){
+  this.getRecipes();
+  axios.get('/api/ingredients')
+      .then(res=> {
+        this.props.ingredientsAction(res.data);
+      })
+}
+
+getRecipes(){
+  if (!this.refs.ingredients){
+    axios.post('/api/recipes', {
+      time: this.state.time,
+      categories: this.props.categories
+    })
+    .then(res => {
+      this.props.searchRecipesAction(res.data);
+    })
+  }
+  else () => {
+    const ingredientsArray = this.refs.ingredients.value.split('\n');
+    ingredientsArray.map((ingredient, i) => {
+        if (ingredient === ''){
+            ingredientsArray.splice(i, 1);
+        }
+    });
+     axios.post('/api/recipes', {
+      ingredients: ingredientsArray,
+      time: this.state.time,
+      categories: this.props.categories
+    })
+      .then(res => {
+        this.props.searchRecipesAction(res.data);
+      })
+  } 
 }
 
 handleChange(e){
@@ -25,30 +63,7 @@ handleChange(e){
   });
 }
 
-getCategories(){
-  axios.get('api/categories')
-    .then(res => {
-      this.setState({
-        categories: res.data
-      });
-    });
-};
-
-clickCategory(e){
-  if (selectedCategories.includes(e.target.value) === false ){
-    selectedCategories.push(e.target.value);
-  };
-};
-
-componentWillMount(){
-  this.getCategories();
-}
-
   render() {
-    const categories = this.state.categories.map((category, i) => {
-      return <option value={category.name} key={i} >{category.name}</option>
-    })
-
     return (
       <div className='dashboard-page' >
         <Header/>
@@ -57,15 +72,11 @@ componentWillMount(){
           <div className='search-contents'>
             <h2>Search</h2>
             <p>Ingredients</p>
-            <textarea placeholder='Ingredient'/>
+            <textarea placeholder='Ingredients' id='ingredients' ref='ingredients'/>
             <p>Max Time to Prepare (in minutes)</p>
             <input type="number" placeholder='Time' name ='time' value={this.state.time} onChange={this.handleChange} />
-            <p>Select Category</p>
-            <select onChange={this.clickCategory} value={this.state.value} >
-              {categories}
-            </select>
-            <button>Add Category</button>
-            <button>Search</button>
+            <Categories/>
+            <button onClick={this.getRecipes} >Search</button>
           </div>
           <div className='recipes-contents'>
             <h2>Recipes</h2>
@@ -81,4 +92,8 @@ componentWillMount(){
   }
 }
 
-export default Dashboard;
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({searchRecipesAction, ingredientsAction}, dispatch);
+}
+
+export default connect(state => state, mapDispatchToProps)(Dashboard);

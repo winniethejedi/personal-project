@@ -1,0 +1,18 @@
+@import './variables.scss';
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+@import './App.scss';
+@import './Components/AddRecipe/AddRecipe.scss';
+@import './Components/Dashboard/Dashboard.scss';
+@import './Components/Header/Header.scss';
+@import './Components/Loading/Loading.scss';
+@import './Components/Login/Login.scss';
+@import './Components/Profile/Profile.scss';
+@import './Components/Recipe/Recipe.scss';
+@import './Components/SearchFail/SearchFail.scss';
+

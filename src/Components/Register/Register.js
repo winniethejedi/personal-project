@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './Register.css';
 import axios from 'axios';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
