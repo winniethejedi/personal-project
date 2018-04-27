@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators} from 'redux';
 import {categoriesCounterAction } from '../../Redux/Actions/actions';
+import RaisedButton from 'material-ui/RaisedButton';
+
+const style = {
+  margin: 12,
+}
 
 class CategoriesSelect extends Component {
     constructor(props){
@@ -16,7 +21,7 @@ class CategoriesSelect extends Component {
     render() {
       return (
           <div className='add-category-button' >
-              <button onClick={this.clickAddCategory} >Add Category</button>
+              <div onClick={this.clickAddCategory}><RaisedButton label='Add Category' style={style}/></div>
           </div>
 
       );

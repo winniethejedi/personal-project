@@ -14,7 +14,7 @@ require('dotenv').config();
 const app = express();
 
 massive(process.env.CONNECTION_STRING)
-    .then((db)=>{
+    .then((db) => {
         console.log('The server is connected to Massive');
         app.set('db', db);
     })
@@ -32,9 +32,9 @@ passport.use('login', new LocalStrategy({
             if (!user || !bcrypt.compareSync(password, user.password)) {
                 return done('Invalid email or password');
             }
-            
+
             delete user.password;
-            
+
             done(null, user);
         })
         .catch(err => {
@@ -49,20 +49,20 @@ passport.use('register', new LocalStrategy({
     if (!email || !password) {
         return done('Email and password are required');
     }
-    
+
     const username = req.body.username;
     const today = new Date();
 
 
-    req.db.findUser({username, email})
+    req.db.findUser({ username, email })
         .then(foundUser => {
-            if (foundUser.length === 0){
+            if (foundUser.length === 0) {
                 password = bcrypt.hashSync(password, bcrypt.genSaltSync(15));
-    
-                req.db.users.insert({ email, password, username:req.body.username, join_date: today.toLocaleString(), profile_pic: req.body.profile_pic})
+
+                req.db.users.insert({ email, password, username: req.body.username, join_date: today.toLocaleString(), profile_pic: req.body.profile_pic })
                     .then(user => {
                         delete user.password;
-                        
+
                         done(null, user);
                     })
                     .catch(err => done(err));
@@ -75,25 +75,25 @@ passport.serializeUser((user, done) => {
     if (!user) {
         done('No user');
     }
-    
+
     done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
     const db = app.get('db');
-    
+
     if (!db) {
         return done('Internal Server Error');
     }
-    
+
     db.users.findOne({ id: user.id })
         .then(user => {
             if (!user) {
                 return done(null, false);
             }
-            
+
             delete user.password;
-            
+
             done(null, user);
         })
         .catch(err => done(err));
@@ -107,7 +107,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     cookie: {
         //days hours minutes seconds milseconds
-        expires:  5 * 24 * 60 * 60 *1000,
+        expires: 5 * 24 * 60 * 60 * 1000,
     },
     saveUninitialized: false,
     rolling: true,
@@ -130,11 +130,11 @@ app.post('/api/auth/login', passport.authenticate(['login']), (req, res) => {
         profile_pic: req.user.profile_pic,
         id: req.user.id
     });
-    
+
 });
 
-app.post('/api/auth/register',  passport.authenticate(['register']), (req, res) => {
-    
+app.post('/api/auth/register', passport.authenticate(['register']), (req, res) => {
+
     res.send({
         success: true,
         message: 'Registered successfully',
@@ -160,7 +160,7 @@ app.get('/api/categories', (req, res) => {
 app.get('/api/user/me', (req, res) => {
     res.send({
         successful: req.isAuthenticated(),
-        ... req.user
+        ...req.user
     })
 });
 
@@ -190,106 +190,156 @@ app.post('/api/recipe', (req, res) => {
         date_added: today,
         user_id: req.user.id
     })
-    .then(foundRecipe => {
-        recipeKey.recipeId = foundRecipe.id;
-    })
-    .then(()=> {
-        const ingredientArr =  req.body.ingredients.map((ingredient, i) => {
-            return req.db.ingredients.find({
-                'name SIMILAR TO': ingredient
+        .then(foundRecipe => {
+            recipeKey.recipeId = foundRecipe.id;
+        })
+        .then(() => {
+            const ingredientArr = req.body.ingredients.map((ingredient, i) => {
+                return req.db.ingredients.find({
+                    'name SIMILAR TO': ingredient
+                })
+            })
+            return Promise.all(ingredientArr);
+        })
+        .then(foundIngredients => {
+            const insertedIngredients = [];
+
+            foundIngredients.forEach((ingredient, i) => {
+                if (ingredient.length == 0) {
+                    insertedIngredients.push(
+                        req.db.ingredients.insert({
+                            name: req.body.ingredients[i],
+                            date_added: today,
+                            user_id: req.user.id
+                        })
+                    )
+
+                }
+            })
+            foundIngredients.forEach((ingredient, i) => {
+                if (ingredient[0]) {
+                    ingredientsKeys.push(ingredient[0].id);
+                }
+            })
+            return Promise.all(insertedIngredients)
+        })
+        .then((insertedIngredients) => {
+            insertedIngredients.forEach((ingredient) => {
+                ingredientsKeys.push(ingredient[0].id);
             })
         })
-        return Promise.all(ingredientArr)
-    })
-    .then(foundIngredients => {
-        const insertedIngredients = [];
-        
-        foundIngredients.forEach((ingredient, i)=>{
-            if (ingredient.length == 0) {
-                insertedIngredients.push(
-                    req.db.ingredients.insert({
-                        name: req.body.ingredients[i],
-                        date_added: today,
-                        user_id: req.user.id
-                    })
-                )
-
-            }
-        })
-        foundIngredients.forEach((ingredient, i)=>{
-            if(ingredient[0]){
-                ingredientsKeys.push(ingredient[0].id);
-            }
-        })
-        return Promise.all(insertedIngredients)
-    })
-    .then((insertedIngredients)=>{
-        insertedIngredients.forEach((ingredient)=>{
-            ingredientsKeys.push(ingredient[0].id);
-        })
-    })
-    // .then((ingredients) => {
-
-    //     const mappedCategories = req.body.categories.map((category, i) => {
-    //         return req.db.categories.findOne({
-    //             name: category
-    //         })
-    //     })
-    //     return Promise.all(mappedCategories)
-    // })
-    // .then(mappedCategories => {
-    //     const newlyMappedCategories = mappedCategories.map((category, i) => {
-    //         categoriesKeys.push(category.id)
-    //     })
-    // })
-    .then(() => {
-        ingredientsKeys.map((ingredientKey, i) => {
-            req.db.recipe_ingredients.insert({
-                recipe_id: recipeKey.recipeId,
-                ingredient_id: ingredientKey,
+        .then(() => {
+            ingredientsKeys.map((ingredientKey, i) => {
+                req.db.recipe_ingredients.insert({
+                    recipe_id: recipeKey.recipeId,
+                    ingredient_id: ingredientKey,
+                });
             });
-        });
-        req.body.categories.map((categoryKey, i) => {
-            req.db.recipe_categories.insert({
-                recipe_id: recipeKey.recipeId,
-                category_id: categoryKey
+            req.body.categories.map((categoryKey, i) => {
+                req.db.recipe_categories.insert({
+                    recipe_id: recipeKey.recipeId,
+                    category_id: categoryKey
+                });
+            })
+        })
+        .then(() => {
+            res.send({
+                message: 'Recipe was successfully added.'
             });
         })
-    })
-    .then(() => {
-        res.send({
-            message: 'Recipe was successfully added.'
-        });
-    })
-    .catch(handleDbError(res));
+        .catch(handleDbError(res));
 })
-  
+
 
 app.get('/api/ingredients', (req, res) => {
     req.db.ingredients.find()
         .then(ingredients => {
             res.send(ingredients);
-        })    
-})
-
-app.post('/api/recipes', (req, res) => {
-    req.db.recipes.find({
-        user_id: req.user.id
-    })
-        .then(recipes => {
-            res.send(recipes);
         })
 })
 
+app.get('/api/recipes', (req, res) => {
+
+    //take in ingredients
+    //50% of ingredients have to match - start with one
+    //Find recipes based on post object data
+    //Get ingredients
+    // Get all recipes
+    // Loop through recipes and grab all the keys
+    // loop through ingredients and grab all keys
+    // select distinct to avoid duplicates
+    // 
+    req.db.recipes.find()
+        .then(recipes => {
+            return Promise.all(recipes.map(recipe => {
+                const recipeId = recipe.id;
+                const ingredientsIdsPromise = req.db.findIngredientKey({ recipeId })
+                    .then((ingredients) => {
+                        return ingredients.map(({ id }) => id);
+                    });
+                const categoriesIdsPromise = req.db.findCategoryKey({ recipeId })
+                    .then((categories) => {
+                        return categories.map(({ id }) => id);
+                    });
+                return Promise.all([ingredientsIdsPromise, categoriesIdsPromise])
+                    .then(([ingredientsIds, categoriesIds]) => {
+                        return Object.assign(recipe, { ingredientsIds }, { categoriesIds });
+                    })
+            }))
+                .then(recipes => {
+                    return res.send(recipes);
+                })
+        })
+        .catch(handleDbError(res));
+})
+
+app.get('/api/user', (req, res) => {
+    const userId = parseInt(req.query.id, 10);
+    req.db.users.findOne({
+        id: userId
+    })
+        .then(user => {
+            const userData = {
+                id: user.id,
+                profile_pic: user.profile_pic,
+                username: user.username
+            }
+            res.send(userData);
+        })
+        .catch(handleDbError(res));
+})
+
+app.post('/api/recipe-ingredients', (req, res) => {
+    const ingredientsPromise = req.body.ingredientsIds.map((ingredientId, i) => {
+        return req.db.findIngredientFromRecipe({ ingredientId })
+    })
+    return Promise.all(ingredientsPromise)
+        .then(ingredients => {
+            res.send(ingredients);
+        })
+        .catch(handleDbError(res));
+})
+
+app.post('/api/recipe-categories', (req, res) => {
+    const categoriesPromise = req.body.categoriesIds.map((categoryId, i) => {
+        return req.db.findCategoryFromRecipe({ categoryId })
+    })
+    return Promise.all(categoriesPromise)
+        .then(categories => {
+            res.send(categories);
+        })
+        .catch(handleDbError(res));
+})
+
 const port = process.env.PORT || 5000;
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log('this port is awesome', port)
 });
 
 function checkDb() {
     return (req, res, next) => {
         const db = app.get('db');
-        
+
         if (db) {
             req.db = db;
             next();
@@ -301,10 +351,10 @@ function checkDb() {
 }
 
 function handleDbError(res) {
-    return (err) => {
+    return (err, ...args) => {
         console.warn('hit a snag');
         console.error(err);
-        
+
         if (err.code == 'ECONNRESET') {
             return res.status(500).send({ message: 'something died again' });
         }

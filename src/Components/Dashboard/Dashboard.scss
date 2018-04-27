@@ -1,0 +1,26 @@
+.dashboard-page h1{
+    text-align: center;
+}
+
+.search-parameters {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.dashboard-ingredients {
+    width: 40%;
+}
+
+.dashboard-time {
+    width: 20%;
+}
+
+.dashboard-categories {
+    width: 20%;
+}
+
+.dashboard-button {
+    margin: auto;
+    text-align: center;
+}

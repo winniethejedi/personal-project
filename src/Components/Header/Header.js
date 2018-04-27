@@ -26,8 +26,13 @@ class Header extends Component {
                 </div>
                 <div className='header-right-side' >
                     <Link to={`/profile/${this.props.login.id}`} >
-                        <p>{this.props.login.username}</p>
-                        <img id='header-profile-pic' src={this.props.login.profile_pic} alt={this.props.login.username}/>
+                        <div id='header-username-profile-pic' >
+                            <p>{this.props.login.username}</p>
+                            <div>
+                                <img id='header-profile-pic' src={this.props.login.profile_pic} alt={this.props.login.username}/>
+                            </div>
+                        </div>
+
                     </Link>
                     <Link to='/'> <div onClick={this.logout}><p>Logout</p></div></Link>
                 </div>

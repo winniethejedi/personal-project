@@ -4,6 +4,11 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators} from 'redux';
 import { loginAction } from '../../Redux/Actions/actions';
+import RaisedButton from 'material-ui/RaisedButton';
+
+const style = {
+    margin: 12,
+};
 
 class Register extends Component {
     constructor(props){
@@ -70,7 +75,7 @@ class Register extends Component {
                         <input name="password" value={this.state.password} onChange={this.handleChange} type="password"/>
                     </div>
                     <div className='register-buttons'>
-                        <div onClick={(event)=>{this.register(event)}} className='dark-green-button'><button>Register</button></div>
+                        <div onClick={(event)=>{this.register(event)}} className='dark-green-button'><RaisedButton label='Register' style={style} /></div>
                     </div>
                  </div>
             </div>

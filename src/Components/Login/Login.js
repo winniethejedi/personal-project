@@ -71,7 +71,7 @@ class Login extends Component {
         //   ];
         return (
             <div className='login-page' >
-                <div className='sidebar' ></div>
+                {/* <div className='sidebar' ></div> */}
                 <div className='login-contents' >              
                     <div className='input-box' >
                         <h3>Email</h3>
@@ -82,9 +82,10 @@ class Login extends Component {
                         <input name="password" value={this.state.password} onChange={this.handleChange} type="password"/>
                     </div>
                     <div className='login-buttons'>
-                        <div><RaisedButton label='Login' onClick={(event)=>{this.login(event)}}/></div>
-                        <div>
+                        <div id='login-button' ><RaisedButton label='Login' onClick={(event)=>{this.login(event)}}/></div>
+                        <div id='register-button' >
                             <RaisedButton label='register' onClick={this.handleOpen}/>
+                            <div classname='register-dialog' >
                             <Dialog
                                 title="Register"
                                 modal={false}
@@ -93,10 +94,12 @@ class Login extends Component {
                             >
                                 <Register/>
                             </Dialog>
+                            </div>
+
                         </div>
                     </div>
                  </div>
-                <div className='sidebar' ></div>
+                {/* <div className='sidebar' ></div> */}
             </div>
         )
     }

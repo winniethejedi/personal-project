@@ -1,4 +1,4 @@
-import { RESET_REDUX_STATE, LOGIN, CATEGORIES, RESET_CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS } from '../Actions/constraints';
+import { RESET_REDUX_STATE, LOGIN, CATEGORIES, RESET_CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE } from '../Actions/constraints';
 
 export function resetRedux() {
     return {
@@ -28,6 +28,14 @@ export function categoriesCounterAction(){
     };
 };
 
+export function allRecipesAction(recipesInfo){
+    return {
+        type: ALL_RECIPES,
+        payload: recipesInfo
+    };
+};
+
+
 export function searchRecipesAction(recipesInfo){
     return {
         type: SEARCH_RECIPES,
@@ -52,5 +60,26 @@ export function ingredientsAction(ingredientsInfo){
     return {
         type: INGREDIENTS,
         payload: ingredientsInfo
+    };
+};
+
+export function ingredientsToRecipeAction(ingredientsRecipeId){
+    return {
+        type: INGREDIENTS_TO_RECIPE,
+        payload: ingredientsRecipeId
+    };
+};
+
+export function categoriesToRecipeAction(categoriesRecipeId){
+    return {
+        type: CATEGORIES_TO_RECIPE,
+        payload: categoriesRecipeId
+    };
+};
+
+export function userToRecipeAction(userRecipeId){
+    return {
+        type: USER_TO_RECIPE,
+        payload: userRecipeId
     };
 };

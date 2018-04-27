@@ -1,0 +1,25 @@
+[
+    {
+        "recipe_id" : 1,
+        "name" : "whatever",
+        "description" : "whatever",
+        "image_url" : "url",
+        "recipe_added_by" : 11,
+        "time" : 30,
+        "date_added" : "10/5/1999",
+        "ingredients" : [
+            {
+                "ingredient_id" : 1,
+                "name" : "whatever",
+                "ingredient_added_by": 2 
+            }
+        ],
+        "categories": [
+            {
+                "category_id" : 1,
+                "name" : "name",
+                "description" : "whatever"
+            }
+        ]
+    }
+]

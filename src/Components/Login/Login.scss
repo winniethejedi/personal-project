@@ -1,0 +1,26 @@
+.login-page {
+    height: 100vh;
+    position: relative;
+}
+
+.login-contents {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.login-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 10px;
+}
+
+#login-button {
+    margin-right: 5px;
+}
+
+#register-button {
+    margin-left: 5px;
+}

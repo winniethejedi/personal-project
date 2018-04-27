@@ -1,0 +1,32 @@
+.recipe-div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    border: solid black 1px;
+    width: 80%;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+.recipe-div-text {
+    width: 50%;
+}
+
+// .recipe-div-time {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-evenly;
+//     display: inline;
+// }
+
+.recipe-div-recipe-image {
+    max-width: 100px;
+    height: auto;
+}
+
+.recipe-div-user-image {
+    max-width: 100px;
+    height: auto;
+}
+

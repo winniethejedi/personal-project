@@ -18,7 +18,7 @@ class CategoriesSelect extends Component {
       }
 
     getCategories(){
-        axios.get('api/categories')
+        axios.get('/api/categories')
           .then(res => {
             this.setState({
               categories: res.data
@@ -41,6 +41,7 @@ class CategoriesSelect extends Component {
           <div className='categories-select' >
               <p>Select Category</p>
               <select onChange={this.clickCategory} value={this.state.value} >
+                <option value="none">Select Category</option>
                   {categories}
               </select>
           </div>
