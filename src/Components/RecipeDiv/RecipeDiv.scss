@@ -1,11 +1,20 @@
 .recipe-div {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     align-items: center;
     justify-content: space-evenly;
     border: solid black 1px;
     width: 80%;
     margin: auto;
+    margin-bottom: 15px;
+}
+
+.recipe-div-recipe {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 80%;
     margin-bottom: 15px;
 }
 
@@ -28,5 +37,15 @@
 .recipe-div-user-image {
     max-width: 100px;
     height: auto;
+}
+
+.recipe-div-user-image-div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 20%;
+    margin: auto;
+    margin-bottom: 15px; 
 }
 

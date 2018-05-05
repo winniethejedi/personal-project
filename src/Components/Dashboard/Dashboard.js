@@ -8,11 +8,28 @@ import { allRecipesAction, searchRecipesAction, userRecipesAction, ingredientsAc
 import Categories from '../Categories/Categories';
 import RecipeDiv from '../RecipeDiv/RecipeDiv';
 import Loading from '../Loading/Loading';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import _ from 'lodash';
+
 
 const style = {
   margin: 12,
-}
+};
+const actions = [
+  <FlatButton
+    label="Cancel"
+    primary={true}
+    onClick={this.handleClose}
+  />,
+  <FlatButton
+    label="Submit"
+    primary={true}
+    keyboardFocused={true}
+    onClick={this.handleClose}
+  />,
+];
 
 class Dashboard extends Component {
   constructor(props){
@@ -24,6 +41,7 @@ class Dashboard extends Component {
       time: '',
       dbIngredients: [],
       isLoaded: false,
+      open: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.getRecipes = this.getRecipes.bind(this);
@@ -44,6 +62,14 @@ componentDidMount(){
   })
 }
 
+handleOpen = () => {
+  this.setState({open: true});
+};
+
+handleClose = () => {
+  this.setState({open: false});
+};
+
 getRecipes(){
   this.setState({
     isLoaded: false
@@ -62,19 +88,87 @@ getRecipes(){
 }
 
 searchRecipes(){
-  const ingredientsArray = [];
+  // debugger;
+  const recipes = this.props.allRecipes;
+  const allIngredients = this.props.ingredients;
+  let inputedIngredients = [];
   const time = parseInt(this.state.time, 10);
   const categories = this.state.categories;
-
-  if (this.refs.ingredients){
-    ingredientsArray.push(this.refs.ingredients.value.split('\n'));
-  }
-  ingredientsArray.forEach((ingredient, i) => {
+  const foundRecipes= [];
+  const inputedIngredientsKeys = [];
+ 
+  inputedIngredients = this.refs.ingredients.value.split('\n');
+  
+  inputedIngredients.forEach((ingredient, i) => {
     if (ingredient === ''){
-        ingredientsArray.splice(i, 1);
+        inputedIngredients.splice(i, 1);
     }
+
+    _.trim(ingredient);
+    _.startCase(ingredient);
+    // const newIngredient = _.trim(ingredient);
+    // const newIngredient2 = _.startCase(newIngredient);
+    // return newIngredient2;
   });
-  // const ingredientsFilter = ingredientsArray.filter()
+
+  // if (inputedIngredients.length === 0){
+  //   return (
+  //     <div>
+  //       <Dialog
+  //         title="Dialog With Actions"
+  //         actions={actions}
+  //         modal={false}
+  //         open={this.state.open}
+  //         onRequestClose={this.handleClose}
+  //       >
+  //         The actions in this window were passed in as an array of React objects.
+  //       </Dialog>
+  //     </div>
+  //   );
+  // }
+
+  if (inputedIngredients.length !== 0){
+
+    const foundIngredientsKeys = allIngredients.filter((ingredient) => {
+      let isThere = false;
+      inputedIngredients.forEach((ing) => {
+        if(ingredient.name === ing) {
+          isThere = true;
+          inputedIngredientsKeys.push(ingredient.id);
+        }
+      })
+      return isThere;
+    })
+
+    const foundRecipesByIngredients = recipes.filter((recipe)=>{
+      if(recipe.ingredientsIds && recipe.ingredientsIds.length > 0){
+        let isThere = false;
+        inputedIngredientsKeys.forEach((ingKey)=>{
+          if(recipe.ingredientsIds.includes(ingKey)){
+            isThere = true;
+          }
+        })
+        return isThere;
+      }
+    })
+    foundRecipes.push(...foundRecipesByIngredients);
+  }
+  if (time !== NaN){
+    const foundRecipesByTime = foundRecipes.filter(recipe => {
+      return parseInt(recipe.time, 10) <= time;
+    })
+     foundRecipes.push(...foundRecipesByTime);
+  }
+  if (categories.length !== 0 ){
+    const foundRecipesByCategories = categories.map((category, i) => {
+      foundRecipes.filter(recipe => {
+        return recipe.categories.includes(category);
+      })
+    })
+     foundRecipes.push(...foundRecipesByCategories);
+  }
+
+  this.props.searchRecipesAction(_.uniq(foundRecipes));
 
 }
 

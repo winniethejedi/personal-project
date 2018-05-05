@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { RESET_REDUX_STATE, LOGIN, CATEGORIES, RESET_CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE } from '../Actions/constraints';
+import { RESET_REDUX_STATE, LOGIN, CATEGORIES, RESET_CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS } from '../Actions/constraints';
 
 function login (state = {}, action){
     switch(action.type){
@@ -50,24 +50,25 @@ function ingredients (state = [], action){
     }
 };
 
+// Need to figure out how to make immutable
 function allRecipes (state = [], action){
     switch(action.type){
         case INGREDIENTS_TO_RECIPE:
-            const filteredState = state.map((recipe, i) => {
+            state.forEach((recipe, i) => {
                 if (recipe.id === action.payload.recipeId) {
                     return recipe.ingredients = action.payload.ingredients;
                 }
             })
             return state;
         case CATEGORIES_TO_RECIPE:
-            const filteredState2 = state.map((recipe, i) => {
+            state.forEach((recipe, i) => {
                 if (recipe.id === action.payload.recipeId) {
                     return recipe.categories = action.payload.categories;
                 }
             })
             return state;
         case USER_TO_RECIPE:
-            const filteredState3 = state.map((recipe, i) => {
+            state.forEach((recipe, i) => {
                 if (recipe.id === action.payload.recipeId) {
                     return recipe.user = action.payload.user;
                 }
@@ -115,7 +116,18 @@ function userRecipes (state = [], action){
     }
 };
 
+function users (state = [], action) {
+    switch(action.type){
+        case USERS:
+            state.push(action.payload)
+            return state;
+        case RESET_REDUX_STATE :
+            return state = [];
+        default:
+            return state;
+    }
+}
 
-const rootReducer = combineReducers({login, categories, categoriesCounter, ingredients, searchRecipes, favoriteRecipes, userRecipes, allRecipes});
+const rootReducer = combineReducers({login, categories, categoriesCounter, ingredients, searchRecipes, favoriteRecipes, userRecipes, allRecipes, users});
 
 export default rootReducer;

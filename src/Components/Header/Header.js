@@ -22,7 +22,7 @@ class Header extends Component {
         return (
            <div className='header' >
                 <div className='header-left-side' >
-                    <Link to='/dashboard'><h1>App Name</h1></Link>
+                    <Link to='/dashboard'><h1>Find Recipes</h1></Link>
                 </div>
                 <div className='header-right-side' >
                     <Link to={`/profile/${this.props.login.id}`} >

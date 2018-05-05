@@ -7,7 +7,7 @@ const massive = require('massive');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-
+const helmet = require('helmet');
 
 require('dotenv').config();
 
@@ -99,6 +99,7 @@ passport.deserializeUser((user, done) => {
         .catch(err => done(err));
 });
 
+app.use(helmet());
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -117,7 +118,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '/build')));
 
 app.use(checkDb());
 

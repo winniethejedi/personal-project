@@ -3,6 +3,7 @@ import Header from '../Header/Header';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Categories from '../Categories/Categories';
+import _ from 'lodash';
 
 class AddRecipe extends Component {
     constructor(props){
@@ -42,6 +43,9 @@ submitForm(e){
         if (ingredient === ''){
             ingredientsArray.splice(i, 1);
         }
+        const newIngredient = _.trim(ingredient);
+        const newIngredient2 = _.startCase(newIngredient);
+        return newIngredient2;
     });
     axios.post('/api/recipe ', {
         name: this.state.name,
