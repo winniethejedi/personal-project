@@ -13,7 +13,7 @@ require('dotenv').config();
 
 const app = express();
 
-massive(process.env.CONNECTION_STRING)
+massive(process.env.DATABASE_URL)
     .then((db) => {
         console.log('The server is connected to database');
         app.set('db', db);
