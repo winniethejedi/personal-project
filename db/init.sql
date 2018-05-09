@@ -49,9 +49,19 @@ CREATE TABLE recipe_categories (
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
+CREATE TABLE favorited_recipes (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    recipe_id INT,
+    date_added DATE,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (recipe_id) REFERENCES recipes(id)
+);
+
 SELECT * FROM users;
 SELECT * FROM recipes;
 SELECT * FROM ingredients;
 SELECT * FROM categories;
 SELECT * FROM recipe_ingredients;
 SELECT * FROM recipe_categories;
+SELECT * FROM favorited_recipes;

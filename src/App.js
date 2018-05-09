@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Dashboard from './Components/Dashboard/Dashboard';
 import Login from './Components/Login/Login';
 import AddRecipe from './Components/AddRecipe/AddRecipe';
+import EditRecipe from './Components/EditRecipe/EditRecipe';
 import Recipe from './Components/Recipe/Recipe';
 import Profile from './Components/Profile/Profile';
 import axios from 'axios';
@@ -26,6 +27,7 @@ class App extends Component {
             <Route path={`/add-recipe`} component={ AddRecipe }/>
             <Route path={'/profile/:userid'} component={ Profile }/>
             <Route path={'/recipe/:recipeid'} component={ Recipe }/>
+            <Route path={`/edit-recipe/:recipeid`} component = { EditRecipe }/>
             <Route path={`/`} component={ Login }/>
           </Switch>
         </Router>

@@ -15,11 +15,11 @@ const app = express();
 
 massive(process.env.CONNECTION_STRING)
     .then((db) => {
-        console.log('The server is connected to Massive');
+        console.log('The server is connected to database');
         app.set('db', db);
     })
     .catch(err => {
-        console.warn('Failed to connect to Massive:');
+        console.warn('Failed to connect to database:');
         console.error(err);
     });
 
@@ -118,7 +118,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static(path.join(__dirname, '/build')));
+app.use(express.static(path.join(__dirname, '../build')));
 
 app.use(checkDb());
 

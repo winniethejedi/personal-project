@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header';
 import { connect } from 'react-redux';
-// import axios from 'axios';
+import axios from 'axios';
+import RaisedButton from 'material-ui/RaisedButton';
+import { Link } from 'react-router-dom';
+import RecipeButtons from '../RecipeButtons/RecipeButtons';
+
+const style = {
+  margin: 12,
+};
 
 class Recipe extends Component {
   constructor(props){
     super(props);
     this.state = {
       recipe: {},
+      canEdit: false,
+      favorited: false
     }
   }
 
@@ -21,6 +30,10 @@ class Recipe extends Component {
     this.setState({
       recipe: recipeInfoObject
     });
+
+    
+
+
   }
 
   render() {
@@ -38,6 +51,7 @@ class Recipe extends Component {
           <p>Preparation time: {this.state.recipe.time} minutes</p>
           <p>{this.state.recipe.directions}</p>
           <p>Categories: {categories}</p>
+          <RecipeButtons childState = {this.state} />
         </div>
     );
   }

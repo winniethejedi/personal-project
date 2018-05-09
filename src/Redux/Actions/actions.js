@@ -1,4 +1,4 @@
-import { RESET_REDUX_STATE, LOGIN, CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS } from '../Actions/constraints';
+import { RESET_REDUX_STATE, LOGIN, CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS, EDIT_RECIPE } from '../Actions/constraints';
 
 export function resetRedux() {
     return {
@@ -88,5 +88,12 @@ export function usersAction(userInfo){
     return {
         type: USERS,
         payload: userInfo
+    }
+}
+
+export function editRecipeAction(recipeInfo){
+    return {
+        type: EDIT_RECIPE,
+        payload: recipeInfo
     }
 }

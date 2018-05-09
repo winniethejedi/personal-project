@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from '../Header/Header';
 import { connect } from 'react-redux';
 import RecipeDiv from '../RecipeDiv/RecipeDiv';
+import Loading from '../Loading/Loading';
 
 
 class Profile extends Component {
@@ -9,11 +10,12 @@ class Profile extends Component {
     super(props)
     this.state = {
       user: {},
-      userRecipes: []
+      userRecipes: [],
+      isLoaded: false
     }
 }
 
-componentWillMount() {
+componentDidMount() {
   const userId = parseInt(this.props.match.params.userid, 10)
   const userInfo = this.props.users.find((user, i) => {
     return user.id === userId;
@@ -23,7 +25,8 @@ componentWillMount() {
   })
   this.setState({
     user: userInfo,
-    userRecipes: userRecipesInfo
+    userRecipes: userRecipesInfo,
+    isLoaded: true
   });
 }
 
@@ -36,7 +39,15 @@ componentWillMount() {
         })
       )
     }
-    if (parseInt(this.props.match.params.userid, 10)  ===  this.props.login.id) {
+    if (!this.state.isLoaded){
+      return (
+        <div>
+          <Header/>
+          <Loading/>
+        </div>
+      )
+    }
+    else if (parseInt(this.props.match.params.userid, 10)  ===  this.props.login.id) {
       return (
         <div>
           <Header/>
@@ -50,19 +61,21 @@ componentWillMount() {
         </div>
       );
     }
-    else return (
-      //figure out how to not make it break when reloading
-      <div>
-        <Header />
-        <img className='profile-pic' src= {this.state.user.profile_pic} alt={this.state.user.username}/>
-        <h1>{this.state.user.username}'s Profile</h1>
-        <h2>{this.state.user.username}'s Recipes</h2>
-          {userRecipes}
-        <h2>Favorite Recipes</h2>
-        <h2>Following</h2>
-        <h2>Followers</h2>
-      </div>
-    )
+    else if (this.state.user) {
+      return (
+        //figure out how to not make it break when reloading
+        <div>
+          <Header />
+          <img className='profile-pic' src= {this.state.user.profile_pic} alt={this.state.user.username}/>
+          <h1>{this.state.user.username}'s Profile</h1>
+          <h2>{this.state.user.username}'s Recipes</h2>
+            {userRecipes}
+          <h2>Favorite Recipes</h2>
+          <h2>Following</h2>
+          <h2>Followers</h2>
+        </div>
+      )
+    } 
   }
 }
 

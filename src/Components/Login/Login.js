@@ -85,7 +85,7 @@ class Login extends Component {
                         <div id='login-button' ><RaisedButton label='Login' onClick={(event)=>{this.login(event)}}/></div>
                         <div id='register-button' >
                             <RaisedButton label='register' onClick={this.handleOpen}/>
-                            <div classname='register-dialog' >
+                            <div className='register-dialog' >
                             <Dialog
                                 title="Register"
                                 modal={false}
