@@ -332,6 +332,20 @@ app.post('/api/recipe-categories', (req, res) => {
         .catch(handleDbError(res));
 })
 
+app.post('/api/favorited-recipes', (req, res) => {
+    const today = new Date();
+    req.db.favorited_recipes.insert({
+        user_id: req.body.userId,
+        recipe_id: req.body.recipeId,
+        date_added: today
+    })
+    .then(() => {
+        res.send({
+            message: 'Recipe successfully favorited'
+        })
+    })
+})
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log('this port is awesome', port)
