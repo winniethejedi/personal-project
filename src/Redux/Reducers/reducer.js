@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { RESET_REDUX_STATE, LOGIN, CATEGORIES, RESET_CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS, EDIT_RECIPE } from '../Actions/constraints';
+import { RESET_REDUX_STATE, LOGIN, CATEGORIES, RESET_CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS, VIEWED_RECIPE, VIEWED_RECIPE_USER, VIEWED_RECIPE_INGREDIENTS, VIEWED_RECIPE_CATEGORIES } from '../Actions/constraints';
 
 function login (state = {}, action){
     switch(action.type){
@@ -128,9 +128,9 @@ function users (state = [], action) {
     }
 }
 
-function editRecipe (state = [], action) {
+function viewedRecipe (state = [], action) {
     switch(action.type){
-        case EDIT_RECIPE:
+        case VIEWED_RECIPE:
             return state = action.payload;
         case RESET_REDUX_STATE :
             return state = [];
@@ -139,6 +139,6 @@ function editRecipe (state = [], action) {
     }
 }
 
-const rootReducer = combineReducers({login, categories, categoriesCounter, ingredients, searchRecipes, favoriteRecipes, userRecipes, allRecipes, users, editRecipe});
+const rootReducer = combineReducers({login, categories, categoriesCounter, ingredients, searchRecipes, favoriteRecipes, userRecipes, allRecipes, users, viewedRecipe});
 
 export default rootReducer;

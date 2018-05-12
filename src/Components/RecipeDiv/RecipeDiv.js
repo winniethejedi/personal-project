@@ -11,7 +11,8 @@ class RecipeDiv extends Component {
     this.state = {
       user: {},
       ingredients: [],
-      categories: []
+      categories: [],
+      // recipe: {}
     }
   }
 

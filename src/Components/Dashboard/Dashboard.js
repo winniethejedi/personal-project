@@ -44,12 +44,10 @@ class Dashboard extends Component {
       open: false
     }
     this.handleChange = this.handleChange.bind(this);
-    this.getRecipes = this.getRecipes.bind(this);
     this.searchRecipes = this.searchRecipes.bind(this);
 }
 
 componentWillMount(){
-  this.getRecipes();
   axios.get('/api/ingredients')
       .then(res=> {
         this.props.ingredientsAction(res.data);
@@ -70,22 +68,6 @@ handleClose = () => {
   this.setState({open: false});
 };
 
-getRecipes(){
-  this.setState({
-    isLoaded: false
-  })
-     axios.get('/api/recipes',)
-      .then(res => {
-        this.props.allRecipesAction(res.data);
-        this.setState({
-          isLoaded: true
-        })
-        const userRecipes = this.props.allRecipes.filter((recipe) => {
-          return recipe.user_id === this.props.login.id;
-        })
-        this.props.userRecipesAction(userRecipes);
-  }) 
-}
 
 searchRecipes(){
   // debugger;

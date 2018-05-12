@@ -15,11 +15,11 @@ const app = express();
 
 massive(process.env.DATABASE_URL)
     .then((db) => {
-        console.log('The server is connected to database');
+        console.log('The server is connected to the database');
         app.set('db', db);
     })
     .catch(err => {
-        console.warn('Failed to connect to database:');
+        console.warn('Failed to connect to the database:');
         console.error(err);
     });
 
@@ -274,11 +274,11 @@ app.get('/api/recipes', (req, res) => {
         .then(recipes => {
             return Promise.all(recipes.map(recipe => {
                 const recipeId = recipe.id;
-                const ingredientsIdsPromise = req.db.findIngredientKey({ recipeId })
+                const ingredientsIdsPromise = req.db.findIngredientKeys({ recipeId })
                     .then((ingredients) => {
                         return ingredients.map(({ id }) => id);
                     });
-                const categoriesIdsPromise = req.db.findCategoryKey({ recipeId })
+                const categoriesIdsPromise = req.db.findCategoryKeys({ recipeId })
                     .then((categories) => {
                         return categories.map(({ id }) => id);
                     });
@@ -344,6 +344,41 @@ app.post('/api/favorited-recipes', (req, res) => {
             message: 'Recipe successfully favorited'
         })
     })
+})
+
+app.get('/api/recipe/:id', (req, res) => {
+    const recipeId = req.params.id;
+    let recipe;
+    req.db.recipes.findOne({
+        id: recipeId
+    })
+    .then((foundRecipe) => {
+        recipe = foundRecipe;
+        const ingredientsIdsPromise = req.db.findIngredientKeys({ recipeId })
+        .then((ingredients) => {
+            return ingredients.map(({ id }) => id);
+        });
+    const categoriesIdsPromise = req.db.findCategoryKeys({ recipeId })
+        .then((categories) => {
+            return categories.map(({ id }) => id);
+        });
+    return Promise.all([ingredientsIdsPromise, categoriesIdsPromise])
+        .then(([ingredientsIds, categoriesIds]) => {
+            return Object.assign(recipe, { ingredientsIds }, { categoriesIds });
+        })
+})
+    // req.db.findIngredientKeys({
+    //     recipeId
+    // })
+    // .then((ingredientKey) => {
+
+    // })
+    // req.db.findCategoryKeys({
+    //     recipeId
+    // })
+    // .then((categoryKey) => {
+        
+    // })
 })
 
 const port = process.env.PORT || 5000;

@@ -1,4 +1,5 @@
-import { RESET_REDUX_STATE, LOGIN, CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS, EDIT_RECIPE } from '../Actions/constraints';
+import { RESET_REDUX_STATE, LOGIN, CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS, VIEWED_RECIPE, VIEWED_RECIPE_USER, VIEWED_RECIPE_INGREDIENTS, VIEWED_RECIPE_CATEGORIES } from '../Actions/constraints';
+import axios from 'axios';
 
 export function resetRedux() {
     return {
@@ -91,9 +92,30 @@ export function usersAction(userInfo){
     }
 }
 
-export function editRecipeAction(recipeInfo){
+export function viewedRecipeAction(recipeInfo){
     return {
-        type: EDIT_RECIPE,
+        type: VIEWED_RECIPE,
+        payload: recipeInfo
+    }
+}
+
+export function viewedRecipeUserAction(recipeInfo){
+    return {
+        type: VIEWED_RECIPE_USER,
+        payload: recipeInfo
+    }
+}
+
+export function viewedRecipeIngredientsAction(recipeInfo){
+    return {
+        type: VIEWED_RECIPE_INGREDIENTS,
+        payload: recipeInfo
+    }
+}
+
+export function viewedRecipeCategoriesAction(recipeInfo){
+    return {
+        type: VIEWED_RECIPE_CATEGORIES,
         payload: recipeInfo
     }
 }

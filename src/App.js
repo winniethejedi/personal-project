@@ -7,20 +7,45 @@ import AddRecipe from './Components/AddRecipe/AddRecipe';
 import EditRecipe from './Components/EditRecipe/EditRecipe';
 import Recipe from './Components/Recipe/Recipe';
 import Profile from './Components/Profile/Profile';
+import Loading from './Components/Loading/Loading';
 import axios from 'axios';
-import { loginAction } from './Redux/Actions/actions';
 import { connect } from 'react-redux';
 import { bindActionCreators} from 'redux';
+import { loginAction, allRecipesAction, searchRecipesAction, userRecipesAction, ingredientsAction } from './Redux/Actions/actions';
 
 class App extends Component {
-  componentDidMount(){
+  constructor(props) {
+    super(props)
+    this.state = {
+      isLoaded : false
+    }
+  }
+  componentWillMount(){
     axios.get('/api/user/me')
       .then((res) => {
         this.props.loginAction(res.data);
+        if (this.props.allRecipes.length === 0){
+          this.setState({
+            isLoaded: false
+          })
+             axios.get('/api/recipes')
+              .then(res => {
+                this.props.allRecipesAction(res.data);
+                this.setState({
+                  isLoaded: true
+                })
+                const userRecipes = this.props.allRecipes.filter((recipe) => {
+                  return recipe.user_id === this.props.login.id;
+                })
+                this.props.userRecipesAction(userRecipes);
+          })
+        }
       })
+   
   }
   render() {
-    return (
+    if(this.state.isLoaded){
+      return (
         <Router>
           <Switch>
             <Route path={`/dashboard`} component={ Dashboard }/>
@@ -32,11 +57,15 @@ class App extends Component {
           </Switch>
         </Router>
     );
+    }else{
+      return <div><Loading/></div>
+    }
+
   }
 }
 
 function mapDispatchToProps(dispatch){
-  return bindActionCreators({loginAction}, dispatch);
+  return bindActionCreators({loginAction, allRecipesAction, searchRecipesAction, userRecipesAction, ingredientsAction}, dispatch);
 }
 
 export default connect(state => state, mapDispatchToProps)(App);
