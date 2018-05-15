@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CategoriesSelect from '../CategoriesSelect/CategoriesSelect';
 import AddCategory from '../AddCategory/AddCategory';
+import DeleteCategory from '../DeleteCategory/DeleteCategory';
 
 class Categories extends Component {
     render() {
@@ -13,6 +14,7 @@ class Categories extends Component {
           <div className='categories' >
             {categorySelectors}
             <AddCategory/>
+            <DeleteCategory/>
           </div>
 
       );

@@ -15,8 +15,6 @@ class RecipeButtons extends Component {
         super(props);
         this.state = {
             recipe: {},
-            canEdit: false,
-            favorited: false,
         }
         this.addToFavorites = this.addToFavorites.bind(this);
     };
@@ -24,8 +22,6 @@ class RecipeButtons extends Component {
 componentDidMount(){
     this.setState({
         recipe: this.props.childState.recipe,
-        canEdit: this.props.childState.canEdit,
-        favorited: this.props.childState.favorited,
     })
 }
 
@@ -42,30 +38,30 @@ componentDidMount(){
       }
 
     render(){
-        if (this.state.favorited && this.state.canEdit) {
+        if (this.props.viewedRecipe.favorited && this.props.viewedRecipe.canEdit) {
             return (
                 <div className='recipe-buttons'>
-                    <RaisedButton label='Edit' style={style} />
+                    <Link to={`/edit-recipe/${this.props.viewedRecipe.id}`} ><RaisedButton label='Edit' style={style} /></Link>
                     <RaisedButton label='Favorited' style={style} />
                 </div>
             )
         }
-        else if (this.state.favorited && !this.state.canEdit) {
+        else if (this.props.viewedRecipe.favorited && !this.props.viewedRecipe.canEdit) {
             return (
                 <div className='recipe-buttons'>
                     <RaisedButton label='Favorited' style={style} />
                 </div>
             )
         }
-        else if (!this.state.favorited && this.state.canEdit) {
+        else if (!this.props.viewedRecipe.favorited && this.props.viewedRecipe.canEdit) {
             return (
                 <div className='recipe-buttons'>
-                    <RaisedButton label='Edit' style={style} />
+                     <Link to={`/edit-recipe/${this.props.viewedRecipe.id}`} ><RaisedButton label='Edit' style={style} /></Link>
                     <RaisedButton label='Add to Favorites' style={style} onClick={this.addToFavorites} />
                 </div>
             )
         }
-        else if (!this.state.favorited && !this.state.canEdit) {
+        else if (!this.props.viewedRecipe.favorited && !this.props.viewedRecipe.canEdit) {
             return (
                 <div className='recipe-buttons'>
                     <RaisedButton label='Add to Favorites' style={style} onClick={this.addToFavorites} />

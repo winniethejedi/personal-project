@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators} from 'redux';
-import {categoriesCounterAction } from '../../Redux/Actions/actions';
+import {categoriesCounterAddAction } from '../../Redux/Actions/actions';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const style = {
   margin: 12,
 }
 
-class CategoriesSelect extends Component {
+class AddCategory extends Component {
     constructor(props){
         super(props);
         this.clickAddCategory = this.clickAddCategory.bind(this);
     }    
 
     clickAddCategory(e){
-        this.props.categoriesCounterAction();
+        this.props.categoriesCounterAddAction();
     }
 
     render() {
@@ -29,7 +29,7 @@ class CategoriesSelect extends Component {
   }
   
   function mapDispatchToProps(dispatch){
-    return bindActionCreators({categoriesCounterAction}, dispatch);
+    return bindActionCreators({categoriesCounterAddAction}, dispatch);
 }
 
-  export default connect(state => state, mapDispatchToProps)(CategoriesSelect);
+  export default connect(state => state, mapDispatchToProps)(AddCategory);

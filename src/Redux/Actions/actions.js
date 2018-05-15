@@ -1,5 +1,4 @@
-import { RESET_REDUX_STATE, LOGIN, CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS, VIEWED_RECIPE, VIEWED_RECIPE_USER, VIEWED_RECIPE_INGREDIENTS, VIEWED_RECIPE_CATEGORIES } from '../Actions/constraints';
-import axios from 'axios';
+import { RESET_REDUX_STATE, LOGIN, CATEGORIES, CATEGORIES_COUNTER_ADD, CATEGORIES_COUNTER_MINUS, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS, VIEWED_RECIPE, ADD_FAVORITE_RECIPE} from '../Actions/constraints';
 
 export function resetRedux() {
     return {
@@ -22,9 +21,16 @@ export function categoriesAction(categoryInfo){
     };
 };
 
-export function categoriesCounterAction(){
+export function categoriesCounterAddAction(){
     return {
-        type: CATEGORIES_COUNTER,
+        type: CATEGORIES_COUNTER_ADD,
+        payload: ''
+    };
+};
+
+export function categoriesCounterMinusAction(){
+    return {
+        type: CATEGORIES_COUNTER_MINUS,
         payload: ''
     };
 };
@@ -99,23 +105,9 @@ export function viewedRecipeAction(recipeInfo){
     }
 }
 
-export function viewedRecipeUserAction(recipeInfo){
+export function addFavoriteRecipe(recipeInfo) {
     return {
-        type: VIEWED_RECIPE_USER,
-        payload: recipeInfo
-    }
-}
-
-export function viewedRecipeIngredientsAction(recipeInfo){
-    return {
-        type: VIEWED_RECIPE_INGREDIENTS,
-        payload: recipeInfo
-    }
-}
-
-export function viewedRecipeCategoriesAction(recipeInfo){
-    return {
-        type: VIEWED_RECIPE_CATEGORIES,
+        type: ADD_FAVORITE_RECIPE,
         payload: recipeInfo
     }
 }

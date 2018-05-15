@@ -1,44 +1,55 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header';
 import { connect } from 'react-redux';
-import { bindActionCreators} from 'redux';
+// import { bindActionCreators} from 'redux';
 import * as Actions from '../../Redux/Actions/actions';
 import axios from 'axios';
-import RaisedButton from 'material-ui/RaisedButton';
-import { Link } from 'react-router-dom';
+// import RaisedButton from 'material-ui/RaisedButton';
+// import { Link } from 'react-router-dom';
 import RecipeButtons from '../RecipeButtons/RecipeButtons';
 import Loading from '../Loading/Loading';
 
-const style = {
-  margin: 12,
-};
+// const style = {
+//   margin: 12,
+// };
 
 class Recipe extends Component {
   constructor(props){
     super(props);
     this.state = {
       recipe: null,
-      canEdit: false,
-      favorited: false
     }
     this.getData = this.getData.bind(this);
   }
 
   componentDidMount(){
-    console.log(this.props)
-    const recipeInfoArray = this.props.allRecipes.filter(recipe => {
-      return recipe.id.toString() === this.props.match.params.recipeid.toString();
-    });
-    const recipeInfoObject = recipeInfoArray[0];
-
-    if (recipeInfoObject.user === undefined) {
-        this.getData(recipeInfoObject);
+    if (this.props.allRecipes.length === 0) {
+      this.props.history.push('/dashboard')
     }
+    else {
+      const recipeInfoArray = this.props.allRecipes.filter(recipe => {
+        return recipe.id.toString() === this.props.match.params.recipeid.toString();
+      });
+      const recipeInfoObject = recipeInfoArray[0];
+  
+      if (recipeInfoObject.user === undefined) {
+          this.getData(recipeInfoObject);
+      }
 
-    this.setState({
-      recipe: recipeInfoObject
-    });
+      if (recipeInfoObject.user_id === this.props.login.id) {
+        recipeInfoObject.canEdit = true;
+      }
+      else {
+        recipeInfoObject.canEdit = false;
+      }
 
+      recipeInfoObject.favorited = false;
+
+      this.setState({
+        recipe: recipeInfoObject
+      });
+      this.props.viewedRecipeAction(recipeInfoObject);
+    }
   }
 
   async getData(recipeInfoObject) {
@@ -49,6 +60,7 @@ class Recipe extends Component {
     const foundCategories = await axios.post('/api/recipe-categories', {
       categoriesIds: recipeInfoObject.categoriesIds
     })
+
     recipeInfoObject.user = foundUser.data;
     const userRecipeId = {
       recipeId: recipeInfoObject.id,

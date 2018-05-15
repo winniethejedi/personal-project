@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { RESET_REDUX_STATE, LOGIN, CATEGORIES, RESET_CATEGORIES, CATEGORIES_COUNTER, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS, VIEWED_RECIPE, VIEWED_RECIPE_USER, VIEWED_RECIPE_INGREDIENTS, VIEWED_RECIPE_CATEGORIES } from '../Actions/constraints';
+import { RESET_REDUX_STATE, LOGIN, CATEGORIES, RESET_CATEGORIES, CATEGORIES_COUNTER_ADD, CATEGORIES_COUNTER_MINUS, SEARCH_RECIPES, FAVORITE_RECIPES, USER_RECIPES, INGREDIENTS, ALL_RECIPES, INGREDIENTS_TO_RECIPE, CATEGORIES_TO_RECIPE, USER_TO_RECIPE, USERS, VIEWED_RECIPE, ADD_FAVORITE_RECIPE} from '../Actions/constraints';
 
 function login (state = {}, action){
     switch(action.type){
@@ -28,8 +28,10 @@ function categories (state = [], action){
 
 function categoriesCounter (state = 1, action){
     switch(action.type){
-        case CATEGORIES_COUNTER :
+        case CATEGORIES_COUNTER_ADD :
             return state += 1;
+        case CATEGORIES_COUNTER_MINUS:
+            return state -=1;
         case RESET_REDUX_STATE :
             return state = 1;
         case RESET_CATEGORIES :
@@ -98,6 +100,9 @@ function favoriteRecipes (state = [], action){
     switch(action.type){
         case FAVORITE_RECIPES :
             return state = action.payload;
+        case ADD_FAVORITE_RECIPE :
+            state.push(action.payload);
+            return state;
         case RESET_REDUX_STATE :
             return state = [];
         default:

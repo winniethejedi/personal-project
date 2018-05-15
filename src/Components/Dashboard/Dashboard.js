@@ -8,8 +8,8 @@ import { allRecipesAction, searchRecipesAction, userRecipesAction, ingredientsAc
 import Categories from '../Categories/Categories';
 import RecipeDiv from '../RecipeDiv/RecipeDiv';
 import Loading from '../Loading/Loading';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+// import Dialog from 'material-ui/Dialog';
+// import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import _ from 'lodash';
 
@@ -17,19 +17,19 @@ import _ from 'lodash';
 const style = {
   margin: 12,
 };
-const actions = [
-  <FlatButton
-    label="Cancel"
-    primary={true}
-    onClick={this.handleClose}
-  />,
-  <FlatButton
-    label="Submit"
-    primary={true}
-    keyboardFocused={true}
-    onClick={this.handleClose}
-  />,
-];
+// const actions = [
+//   <FlatButton
+//     label="Cancel"
+//     primary={true}
+//     onClick={this.handleClose}
+//   />,
+//   <FlatButton
+//     label="Submit"
+//     primary={true}
+//     keyboardFocused={true}
+//     onClick={this.handleClose}
+//   />,
+// ];
 
 class Dashboard extends Component {
   constructor(props){
@@ -52,6 +52,20 @@ componentWillMount(){
       .then(res=> {
         this.props.ingredientsAction(res.data);
       })
+   axios.get('/api/recipes')
+      .then(res => {
+        this.props.allRecipesAction(res.data);
+        this.setState({
+          isLoaded: true
+        })
+        const userRecipes = this.props.allRecipes.filter((recipe) => {
+          return recipe.user_id === this.props.login.id;
+        })
+        this.props.userRecipesAction(userRecipes);
+  })
+  axios.get(`/api/favorite-recipes?id=${this.props.login.id}`, (req, res) => {
+
+  })
 }
 
 componentDidMount(){
@@ -72,7 +86,7 @@ handleClose = () => {
 searchRecipes(){
   // debugger;
   const recipes = this.props.allRecipes;
-  const allIngredients = this.props.ingredients;
+  // const allIngredients = this.props.ingredients;
   let inputedIngredients = [];
   const time = parseInt(this.state.time, 10);
   const categories = this.state.categories;
@@ -111,16 +125,16 @@ searchRecipes(){
 
   if (inputedIngredients.length !== 0){
 
-    const foundIngredientsKeys = allIngredients.filter((ingredient) => {
-      let isThere = false;
-      inputedIngredients.forEach((ing) => {
-        if(ingredient.name === ing) {
-          isThere = true;
-          inputedIngredientsKeys.push(ingredient.id);
-        }
-      })
-      return isThere;
-    })
+    // const foundIngredientsKeys = allIngredients.filter((ingredient) => {
+    //   let isThere = false;
+    //   inputedIngredients.forEach((ing) => {
+    //     if(ingredient.name === ing) {
+    //       isThere = true;
+    //       inputedIngredientsKeys.push(ingredient.id);
+    //     }
+    //   })
+    //   return isThere;
+    // })
 
     const foundRecipesByIngredients = recipes.filter((recipe)=>{
       if(recipe.ingredientsIds && recipe.ingredientsIds.length > 0){

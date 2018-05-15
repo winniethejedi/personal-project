@@ -17,14 +17,14 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoaded : false
+      isLoaded : true
     }
   }
   componentWillMount(){
     axios.get('/api/user/me')
       .then((res) => {
         this.props.loginAction(res.data);
-        if (this.props.allRecipes.length === 0){
+        if (this.props.allRecipes.length === 0 && this.props.login.successful === true ){
           this.setState({
             isLoaded: false
           })
