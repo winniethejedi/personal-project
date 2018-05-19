@@ -28,4 +28,8 @@ AuthRouter.post('/api/auth/register', passport.authenticate(['register']), (req,
     });
 });
 
+AuthRouter.post('/api/auth/logout', (req, res) => {
+    req.session.destroy();
+});
+
 module.exports = AuthRouter;
