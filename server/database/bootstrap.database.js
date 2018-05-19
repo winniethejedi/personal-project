@@ -3,9 +3,9 @@ const massive = require('massive');
 let db;
 
 massive(process.env.DATABASE_URL)
-    .then((db) => {
+    .then((dbInstance) => {
         console.log('The server is connected to the database');
-        app.set('db', db);
+        db = dbInstance;
     })
     .catch(err => {
         console.warn('Failed to connect to the database:');
@@ -24,4 +24,4 @@ massive(process.env.DATABASE_URL)
 
 module.exports = {
     getDb,
-}
+};

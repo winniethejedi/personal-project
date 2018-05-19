@@ -20,7 +20,7 @@ FavoriteRecipesRouter.post('/', (req, res) => {
 
 FavoriteRecipesRouter.get('/', (req, res) => {
     const userId = req.query.id;
-    req.findFavoriteRecipes({userId})
+    req.db.findFavoriteRecipes({userId})
         .then(favoriteRecipesKeys => {
             res.send({
                 favoriteRecipesKeys

@@ -17,23 +17,21 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((user, done) => {
-    const db = app.get('db');
-
-    if (!db) {
-        return done('Internal Server Error');
-    }
-
-    db.users.findOne({ id: user.id })
-        .then(user => {
-            if (!user) {
-                return done(null, false);
-            }
-
-            delete user.password;
-
-            done(null, user);
+    getDb()
+        .then(db => {
+            db.users.findOne({ id: user.id })
+            .then(user => {
+                if (!user) {
+                    return done(null, false);
+                }
+    
+                delete user.password;
+    
+                done(null, user);
+            })
+            .catch(err => done(err));
         })
-        .catch(err => done(err));
+        .catch(err => done(Error('Internal Server Error')));
 });
 
 module.exports = passport;

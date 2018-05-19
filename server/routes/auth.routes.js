@@ -4,7 +4,7 @@ const passport = require('../auth/bootstrap.auth');
 
 const AuthRouter = express.Router();
 
-AuthRouter.post('/api/auth/login', passport.authenticate(['login']), (req, res) => {
+AuthRouter.post('/login', passport.authenticate(['login']), (req, res) => {
     res.send({
         success: true,
         message: 'Logged in successfully',
@@ -16,7 +16,7 @@ AuthRouter.post('/api/auth/login', passport.authenticate(['login']), (req, res) 
 
 });
 
-AuthRouter.post('/api/auth/register', passport.authenticate(['register']), (req, res) => {
+AuthRouter.post('/register', passport.authenticate(['register']), (req, res) => {
 
     res.send({
         success: true,

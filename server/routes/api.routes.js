@@ -2,15 +2,17 @@ const express = require('express');
 
 const FavoriteRecipesRouter = require('./favorite-recipes.routes');
 const RecipeRouter = require('./recipe.routes');
+const UserRouter = require('./user.routes');
 const handleDbError = require('../database/handleError.database');
 
 const ApiRouter = express.Router();
 
 ApiRouter.use('/favorite-recipes', FavoriteRecipesRouter);
 ApiRouter.use('/recipe', RecipeRouter);
+ApiRouter.use('/user', UserRouter);
 
 
-app.get('/categories', (req, res) => {
+ApiRouter.get('/categories', (req, res) => {
     req.db.categories.find()
         .then(categories => {
             res.send(categories);
@@ -19,14 +21,14 @@ app.get('/categories', (req, res) => {
 });
 
 
-app.get('/ingredients', (req, res) => {
+ApiRouter.get('/ingredients', (req, res) => {
     req.db.ingredients.find()
         .then(ingredients => {
             res.send(ingredients);
         })
 })
 
-app.get('/recipes', (req, res) => {
+ApiRouter.get('/recipes', (req, res) => {
 
     //take in ingredients
     //50% of ingredients have to match - start with one
@@ -61,7 +63,7 @@ app.get('/recipes', (req, res) => {
         .catch(handleDbError(res));
 })
 
-app.post('/recipe-ingredients', (req, res) => {
+ApiRouter.post('/recipe-ingredients', (req, res) => {
     const ingredientsPromise = req.body.ingredientsIds.map((ingredientId, i) => {
         return req.db.findIngredientFromRecipe({ ingredientId })
     })
@@ -72,7 +74,7 @@ app.post('/recipe-ingredients', (req, res) => {
         .catch(handleDbError(res));
 })
 
-app.post('/recipe-categories', (req, res) => {
+ApiRouter.post('/recipe-categories', (req, res) => {
     const categoriesPromise = req.body.categoriesIds.map((categoryId, i) => {
         return req.db.findCategoryFromRecipe({ categoryId })
     })

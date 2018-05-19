@@ -33,7 +33,7 @@ class Register extends Component {
             return alert('Must enter username');
         }
         else
-        axios.post(`/api/auth/register`, {email: this.state.email, password: this.state.password, username: this.state.username, profile_pic: profilePic})
+        axios.post(`/auth/register`, {email: this.state.email, password: this.state.password, username: this.state.username, profile_pic: profilePic})
             .then((response)=>{
                 if(response.data.success){
                     this.props.loginAction({

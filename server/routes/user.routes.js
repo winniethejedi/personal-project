@@ -4,14 +4,14 @@ const handleDbError = require('../database/handleError.database');
 
 const UserRouter = express.Router();
 
-UserRouter.get('/user/me', (req, res) => {
+UserRouter.get('/me', (req, res) => {
     res.send({
         successful: req.isAuthenticated(),
         ...req.user
     })
 });
 
-UserRouter.get('/user', (req, res) => {
+UserRouter.get('/', (req, res) => {
     const userId = parseInt(req.query.id, 10);
     req.db.users.findOne({
         id: userId

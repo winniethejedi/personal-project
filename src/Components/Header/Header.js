@@ -14,7 +14,7 @@ class Header extends Component {
     };
 
     logout() {
-        axios.post('/api/auth/logout');
+        axios.post('/auth/logout');
         this.props.resetRedux();
     };
 

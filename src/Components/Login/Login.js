@@ -28,7 +28,7 @@ class Login extends Component {
         this.setState({
             isLoaded: false
         })
-        axios.post(`/api/auth/login`, {email:this.state.email, password:this.state.password})
+        axios.post(`/auth/login`, {email:this.state.email, password:this.state.password})
             .then((response)=>{
                 if(response.data.success){
                     this.setState({

@@ -1,10 +1,10 @@
 const path = require('path');
 const express = require('express');
 
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
+require('dotenv').config({ path: path.join(__dirname, './.env') });
 
-const addGlobalMiddleware = require('./middleware/global.middleware');
-const addRoutes = require('./routes/global.routes');
+const addGlobalMiddleware = require('./server/middleware/global.middleware');
+const addRoutes = require('./server/routes/global.routes');
 
 const app = express();
 
