@@ -7,6 +7,7 @@ const addGlobalMiddleware = require('./server/middleware/global.middleware');
 const addRoutes = require('./server/routes/global.routes');
 
 const app = express();
+app.use(express.static(path.join(__dirname, './build')));
 
 addGlobalMiddleware(app);
 addRoutes(app);
