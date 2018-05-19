@@ -84,9 +84,9 @@ handleClose = () => {
 
 
 searchRecipes(){
-  // debugger;
+  debugger;
   const recipes = this.props.allRecipes;
-  // const allIngredients = this.props.ingredients;
+  const allIngredients = this.props.ingredients;
   let inputedIngredients = [];
   const time = parseInt(this.state.time, 10);
   const categories = this.state.categories;
@@ -102,9 +102,9 @@ searchRecipes(){
 
     _.trim(ingredient);
     _.startCase(ingredient);
-    // const newIngredient = _.trim(ingredient);
-    // const newIngredient2 = _.startCase(newIngredient);
-    // return newIngredient2;
+    const newIngredient = _.trim(ingredient);
+    const newIngredient2 = _.startCase(newIngredient);
+    return newIngredient2;
   });
 
   // if (inputedIngredients.length === 0){
@@ -125,16 +125,16 @@ searchRecipes(){
 
   if (inputedIngredients.length !== 0){
 
-    // const foundIngredientsKeys = allIngredients.filter((ingredient) => {
-    //   let isThere = false;
-    //   inputedIngredients.forEach((ing) => {
-    //     if(ingredient.name === ing) {
-    //       isThere = true;
-    //       inputedIngredientsKeys.push(ingredient.id);
-    //     }
-    //   })
-    //   return isThere;
-    // })
+    const foundIngredientsKeys = allIngredients.filter((ingredient) => {
+      let isThere = false;
+      inputedIngredients.forEach((ing) => {
+        if(ingredient.name === ing) {
+          isThere = true;
+          inputedIngredientsKeys.push(ingredient.id);
+        }
+      })
+      return isThere;
+    })
 
     const foundRecipesByIngredients = recipes.filter((recipe)=>{
       if(recipe.ingredientsIds && recipe.ingredientsIds.length > 0){
