@@ -57,7 +57,7 @@ submitForm(e){
         const newIngredient2 = _.startCase(newIngredient);
         return newIngredient2;
     });
-    axios.post('/api/recipe ', {
+    axios.post('/api/recipe', {
         name: this.state.name,
         description: this.state.description,
         ingredients: ingredientsArray,

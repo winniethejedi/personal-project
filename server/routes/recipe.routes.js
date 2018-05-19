@@ -100,7 +100,7 @@ RecipeRouter.post('/', (req, res) => {
         })
         .then((insertedIngredients) => {
             insertedIngredients.forEach((ingredient) => {
-                ingredientsKeys.push(ingredient[0].id);
+                ingredientsKeys.push(ingredient.id);
             })
         })
         .then(() => {
@@ -174,7 +174,7 @@ RecipeRouter.put('/', (req, res) => {
         })
         .then((insertedIngredients) => {
             insertedIngredients.forEach((ingredient) => {
-                ingredientsKeys.push(ingredient[0].id);
+                ingredientsKeys.push(ingredient.id);
             })
         })
         .then(() => {

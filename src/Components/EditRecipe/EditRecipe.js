@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from '../Header/Header';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import * as Actions from '../../Redux/Actions/actions';
 import Categories from '../Categories/Categories';
 import _ from 'lodash';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -57,16 +58,16 @@ submitForm(e){
         const newIngredient2 = _.startCase(newIngredient);
         return newIngredient2;
     });
-    axios.put('/api/recipe ', {
+    axios.put('/api/recipe', {
         id: this.props.viewedRecipe.id,
-        name: this.props.viewedRecipe.name,
-        description: this.props.viewedRecipe.description,
+        name: this.refs.name.value,
+        description: this.refs.description.value,
         ingredients: ingredientsArray,
-        directions: this.props.viewedRecipe.directions,
-        time: this.props.viewedRecipe.time,
-        image: this.props.viewedRecipe.image,
+        directions: this.refs.directions.value,
+        time: this.refs.time.value,
+        image: this.state.image,
         categories: this.props.categories,
-        userId: this.props.login.userId
+        userId: this.props.login.id
     })
     .then((res)=>{
         this.setState({

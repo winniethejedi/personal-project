@@ -27,7 +27,7 @@ class CategoriesSelect extends Component {
       };
 
     clickCategory(e){
-        if (this.props.categories.includes(e.target.value) === false ){
+        if (this.props.categories.includes(e.target.value) === false && this.props.categories.length < this.props.categoriesCounter){
             this.props.categoriesAction(e.target.value);
         };
     };
