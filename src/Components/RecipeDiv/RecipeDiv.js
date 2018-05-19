@@ -39,7 +39,10 @@ class RecipeDiv extends Component {
     })
       .then(res => {
         const ingredients = res.data.map(ingredient => {
-          return ingredient[0].name;
+          if (ingredient[0]) {
+            return ingredient[0].name;
+          }
+          else return ingredient.name;
         })
         this.setState({
           ingredients: ingredients

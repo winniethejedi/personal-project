@@ -30,7 +30,7 @@
     "session": "^0.1.0"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "react-scripts start",
     "heroku-postbuild": "npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
